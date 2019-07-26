@@ -38,6 +38,7 @@ python3.7 StatBotorio.py
 #### Even when you close the session have the bot running (not nessecary)
 
 Run via screen (in the bot/src folder)
+
 `screen -dmS StatsBot python3.7 StatBotorio.py`
 
 
