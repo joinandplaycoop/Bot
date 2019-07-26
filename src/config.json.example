@@ -1,0 +1,9 @@
+{
+  "mysql": {
+    "host": "localhost",
+    "user": "defaultUser",
+    "passwd": "my secret password",
+    "db": "factoStats"
+  },
+  "botToken": "default_NDQ1NDAzODasdffMTUzNDc1.XTjpiA.Oxkzzeas_MOCK_adfasdfG0jr_zQ"
+}
