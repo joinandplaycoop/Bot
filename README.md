@@ -25,7 +25,7 @@ From repo directory, run "pip install -r requirements.txt"
 
 `cd Bot`
 
-**Install the requirements with pip and using the requirements file
+**Install the requirements with pip and using the requirements file**
 
 `python3.7 -m pip install -r requirements.txt`
 
