@@ -1,16 +1,14 @@
 from dataclasses import dataclass
-
-class configModel(object):
-    """Config Model"""
+  
+@dataclass
+class MySql:
+    host : str
+    user : str
+    passwd : str
+    db : str
     
 @dataclass
 class Cfg:
-    mysql: dict
-    botToken: str
-
-@dataclass
-class MySql:
-    host: str
-    user: str
-    passwd: str
-    db: str
+    mysql : MySql
+    botToken : str
+    cogs_dir :str

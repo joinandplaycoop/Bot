@@ -22,6 +22,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="baseCommandModule.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cogs\playerStats.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cogs\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="models\configModel.py">
       <SubType>Code</SubType>
     </Compile>
@@ -30,6 +39,9 @@
     </Compile>
     <Compile Include="StatBotorio.py" />
     <Compile Include="config.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cogs\serverStats.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="utilities\__init__.py">
@@ -42,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+    <Folder Include="cogs\" />
     <Folder Include="utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

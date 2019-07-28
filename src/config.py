@@ -11,7 +11,7 @@ class Config(object):
             Config.loadConfig()
         return Config.__instance
 
-    cfg : Cfg = None
+    cfg : Cfg
    
     @classmethod
     def loadConfig(cls):
