@@ -72,4 +72,7 @@ screen -dmS StatsBot python3.7 StatBotorio.py
   * ping1 - Debug command from player stats
 * Server Stats
   * ping2 - Debug command from server stats
+  * online - Shows table of who is online
+* Debug (realoded in python every command.  live testing)
+  * t1 - test 1 command for development
   
