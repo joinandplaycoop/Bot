@@ -38,11 +38,11 @@ cd src
 python3.7 StatBotorio.py
 ```
 
-** Config **
+**Config**
 remove ".example" from the file called "config.json.example"
 populate the botToken and the connection string for MySql
 
-** Update Database schema**
+**Update Database schema**
 If the schema is updated in the database, the models will have to be updated also.
 the models are are contained in data/schema.py
 use sqlcodegen to generate the models automatically with your MySql Connection string.
