@@ -37,6 +37,19 @@
 cd src
 python3.7 StatBotorio.py
 ```
+
+** Config **
+remove ".example" from the file called "config.json.example"
+populate the botToken and the connection string for MySql
+
+** Update Database schema**
+If the schema is updated in the database, the models will have to be updated also.
+the models are are contained in data/schema.py
+use sqlcodegen to generate the models automatically with your MySql Connection string.
+Here is an example:
+
+use sqlacodegen --outfile schema.py mysql://username:password@www.ip.com:port/database
+
 #### Even when you close the session have the bot running (not nessecary)
 
 Run via screen (in the bot/src folder)
