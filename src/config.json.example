@@ -1,10 +1,14 @@
 {
   "mysql": {
-    "host": "localhost",
-    "user": "defaultUser",
-    "passwd": "my secret password",
-    "db": "factoStats"
+    "connectionString": "mysql://username:password@www.ip.com:port/database"
   },
-  "botToken": "default_NDQ1NDAzODasdffMTUzNDc1.XTjpiA.Oxkzzeas_MOCK_adfasdfG0jr_zQ",
-  "cogs_dir": "cogs"
+  "debugMode": true,
+
+  "botToken": "main_NDQ1NDAzODasdffMTUzNDc1.XTjpiA.Oxkzzeas_MOCK_adfasdfG0jr_zQ",
+  "botTokenDebug": "debug_NDQ1NDAzODasdffMTUzNDc1.XTjpiA.Oxkzzeas_MOCK_adfasdfG0jr_zQ",
+
+  "cogs_dir": "cogs",
+
+  "cmdPrefix": "?",
+  "cmdPrefixDebug": "??"
 }

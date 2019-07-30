@@ -2,13 +2,15 @@ from dataclasses import dataclass
   
 @dataclass
 class MySql:
-    host : str
-    user : str
-    passwd : str
-    db : str
+    connectionString : str  #example: "mysql://username:password@www.ip.com:port/database"
+ 
     
 @dataclass
-class Cfg:
+class Cfg:   
+    debugMode: bool  #uses debug configuration options
     mysql : MySql
     botToken : str
-    cogs_dir :str
+    botTokenDebug : str
+    cogs_dir : str
+    cmdPrefix : str
+    cmdPrefixDebug : str

@@ -19,7 +19,7 @@ class Config(object):
             data = json.load(json_data_file)
             model = from_dict(Cfg,data)
             Config.cfg = model
-            print(Config.cfg)
+            #print(Config.cfg)
 
 Config.loadConfig()
 

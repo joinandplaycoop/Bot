@@ -1,5 +1,5 @@
 
-# Work with Python 3.6
+# Work with Python 3.7
 import discord
 #from cogs import *
 import random
@@ -14,10 +14,16 @@ from os.path import isfile, join
 from discord.ext import commands
 from discord.ext.commands.bot import Bot
 from config import Config
+import data.session
+from utilities import Table
+
+if Config.cfg.debugMode : print("   DEBUG MODE ENABLED   ")
 
 description = '''A bot that shows factorio server statistics for joinandplaycoop.'''
+prefix = Config.cfg.cmdPrefix if Config.cfg.debugMode == False else Config.cfg.cmdPrefixDebug
+client : Bot = commands.Bot(command_prefix = prefix, description = description)
 
-client : Bot = commands.Bot(command_prefix = '?', description = description)
+
 client.activity = discord.Game(name='Factorio')
 #BaseCommandModule.initCommands(client)
 
@@ -37,6 +43,12 @@ async def on_message(message: discord.Message):
 
     if message.content.startswith('$hello'):
         await message.channel.send('Hello! ' + message.author.display_name)
+
+    #reloads debug cog before every command (if debugging)
+    if Config.cfg.debugMode and message.content.startswith(prefix):
+        cogs_dir = Config.cfg.cogs_dir
+        if isfile(join(cogs_dir, "debug.py")):
+            client.reload_extension(cogs_dir + ".debug")
 
     await client.process_commands(message)
 
@@ -95,5 +107,5 @@ if __name__ == "__main__":
         except Exception as e:
             print(f'Failed to load extension {extension}.')
             traceback.print_exc()
-    
-    client.run(Config.cfg.botToken)
+    token = Config.cfg.botToken if Config.cfg.debugMode == False else Config.cfg.botTokenDebug
+    client.run(token)

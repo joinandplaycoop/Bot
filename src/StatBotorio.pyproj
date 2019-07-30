@@ -12,6 +12,11 @@
     <Name>StatBotorio</Name>
     <RootNamespace>StatBotorio</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>
+    </CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <InterpreterId>MSBuild|virtenvironment|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,15 +30,28 @@
     <Compile Include="baseCommandModule.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="cogs\debug.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="cogs\playerStats.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="cogs\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="data\session.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="data\storedProc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="data\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="models\configModel.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="data\schema.py" />
     <Compile Include="models\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -42,6 +60,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="cogs\serverStats.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\table.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="utilities\__init__.py">
@@ -53,9 +74,25 @@
     <Content Include="config.json.example" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="data\" />
     <Folder Include="models\" />
     <Folder Include="cogs\" />
     <Folder Include="utilities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.6" />
+    <InterpreterReference Include="Global|PythonCore|3.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="..\virtenvironment\">
+      <Id>virtenvironment</Id>
+      <Version>3.7</Version>
+      <Description>virtenvironment (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -1,21 +1,16 @@
-from baseCommandModule import BaseCommandModule
 import discord
+from data import *
+from baseCommandModule import BaseCommandModule
 from discord.ext import commands
+from utilities import Table
 
-class ServerStats(commands.Cog):
-    """Config Model"""
+class Debug(BaseCommandModule):
+    """Cog of Debug commands"""
     def __init__(self, bot):
-         self.bot = bot
-
-    def initCommandModule():
-        pass
+        self.bot = bot
 
     @commands.command()
-    async def ping2(self, ctx):
-        await ctx.send("pong from: serverStats")
-
-    @commands.command()
-    async def online(self, ctx):
+    async def t1(self, ctx):
         try:
             result = PlayersOnline_Result.execute(self._session)
 
@@ -28,7 +23,6 @@ class ServerStats(commands.Cog):
             await ctx.send(table.toString())
         except Exception as e:
             await ctx.send(str(e))
-
-
+        
 def setup(bot):
-    bot.add_cog(ServerStats(bot))
+    bot.add_cog(Debug(bot))
