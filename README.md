@@ -16,10 +16,6 @@
 apt install python3.7 python3-pip -y
 ```
 
-**Install pip3.7** 
-```
-python3.7 -m pip install pip
-```
 **Clone the bot**
 ```
 git clone https://github.com/joinandplaycoop/Bot.git
@@ -28,9 +24,10 @@ git clone https://github.com/joinandplaycoop/Bot.git
 ```
 cd Bot
 ```
-**Install the requirements with pip and using the requirements file**
+**Install the requirements with pip and using the requirements file also add the libs only if you have problems adding mysqlclient**
 ```
-python3.7 -m pip install -r requirements.txt
+apt install python3-dev default-libmysqlclient-dev
+pip3 install -r requirements.txt
 ```
 **Move to src and run the bot**
 
