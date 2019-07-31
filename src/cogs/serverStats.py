@@ -1,8 +1,10 @@
 from baseCommandModule import BaseCommandModule
 import discord
 from discord.ext import commands
+from data import *
+from utilities import Table
 
-class ServerStats(commands.Cog):
+class ServerStats(BaseCommandModule):
     """Config Model"""
     def __init__(self, bot):
          self.bot = bot

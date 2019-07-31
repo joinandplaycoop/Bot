@@ -5,7 +5,13 @@ from data.session import Session
 
 
 class BaseCommandModule(commands.Cog):
-    """Base class of all command modules.  All command modules inherit from BaseCommandModule and are placed in the cogs Folder"""
+    """
+    Base class of all command modules.  All command modules inherit from BaseCommandModule and are placed in the cogs Folder
+    Purpose of BaseClase:
+        gives access to other cogs via _subclasses
+        access to sqlalchemy _session
+        
+    """
 
     _subclasses = []
     _session = Session()
