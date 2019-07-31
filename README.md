@@ -13,7 +13,7 @@
 
 **Install python3.7 and pip 3.6 to get the lastest pip3.7**
 ```
-apt install python3.7 python3-apt python3-pip python3-dev default-libmysqlclient-dev -y
+apt install python3.7 python3-mysqldb python3-apt python3-pip python3.7-dev default-libmysqlclient-dev -y
 ```
 
 **Clone the bot**
@@ -34,6 +34,15 @@ pip3 install -r requirements.txt
 cd src
 python3.7 StatBotorio.py
 ```
+
+##### If you have any issues with a module try to run this 
+```
+apt remove python3-apt
+apt install python3-apt
+apt install python-mysqldb
+apt install python3.7-dev default-libmysqlclient-dev
+```
+
 
 **Config**
 
