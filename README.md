@@ -26,7 +26,7 @@ cd Bot
 ```
 **Install the requirements with pip and using the requirements file**
 ```
-pip3 install -r requirements.txt
+python3.7 -m pip install -r requirements.txt
 ```
 **Move to src and run the bot**
 
