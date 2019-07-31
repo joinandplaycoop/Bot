@@ -22,10 +22,10 @@ class ServerStats(BaseCommandModule):
             result = PlayersOnline_Result.execute(self._session)
 
             #for row in result:
-            table = Table("Server","Online")
+            table = Table("Server","Online","IP")
 
             for r in result:
-                table.addRow(r.fk_server, r.number_of_players_connected)
+                table.addRow(r.FKServerId, r.TotalPlayersOnline, r.IP)
 
             await ctx.send(table.toString())
         except Exception as e:
