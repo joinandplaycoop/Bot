@@ -4,6 +4,7 @@ class PlayersOnline_Result(object):
 
     def __init__(self, **kwargs):
         self.FKServerId : str = kwargs['FKServerId']
+        self.IP : str = kwargs['IP']
         self.TotalPlayersOnline : int = kwargs.get('TotalPlayersOnline')
 
     @classmethod
@@ -19,6 +20,7 @@ class PlayersOnline_Result(object):
     @staticmethod
     def bind(x) :
         return PlayersOnline_Result(FKServerId = x[0],
-                                TotalPlayersOnline= x[1])
+                                TotalPlayersOnline= x[1],
+				IP= x[2])
 
 
