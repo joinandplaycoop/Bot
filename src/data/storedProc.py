@@ -20,7 +20,7 @@ class PlayersOnline_Result(object):
     @staticmethod
     def bind(x) :
         return PlayersOnline_Result(FKServerId = x[0],
-                                TotalPlayersOnline= x[1],
-				IP= x[2])
+                                    TotalPlayersOnline= x[1],
+				                    IP= x[2])
 
 
