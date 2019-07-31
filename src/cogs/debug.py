@@ -18,7 +18,7 @@ class Debug(BaseCommandModule):
             table = Table("Server","Online")
 
             for r in result:
-                table.addRow(r.fk_server, r.number_of_players_connected)
+                table.addRow(r.FKServerId, r.TotalPlayersOnline)
 
             await ctx.send(table.toString())
         except Exception as e:

@@ -3,10 +3,8 @@ from typing import List
 class PlayersOnline_Result(object):
 
     def __init__(self, **kwargs):
-        self.fk_server : str = kwargs['fk_server']
-        self.number_of_players_connected : int = kwargs.get('number_of_players_connected')
-        self.number_of_total_players : int = kwargs.get('number_of_total_players')
-        self.date : datetime = kwargs.get('date')
+        self.FKServerId : str = kwargs['FKServerId']
+        self.TotalPlayersOnline : int = kwargs.get('TotalPlayersOnline')
 
     @classmethod
     def execute(cls, session) -> List['PlayersOnline_Result']:
@@ -20,9 +18,7 @@ class PlayersOnline_Result(object):
 
     @staticmethod
     def bind(x) :
-        return PlayersOnline_Result(fk_server = x[0],
-                                number_of_players_connected= x[1],
-                                number_of_total_players= x[2],
-                                date= x[3])
+        return PlayersOnline_Result(FKServerId = x[0],
+                                TotalPlayersOnline= x[1])
 
 
