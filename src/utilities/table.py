@@ -35,7 +35,7 @@ class Table(object):
                 width : int = self._columns[colIndex].width
 
                 if width == 0 :
-                    width = self._columns[colIndex].width = len(max(self._rows, key = lambda x: str(x[colIndex]))[colIndex])
+                    width = self._columns[colIndex].width = len(max(self._rows, key = lambda x: len(str(x[colIndex])))[colIndex])
 
                 if rowIndex == 0:
                     #create header

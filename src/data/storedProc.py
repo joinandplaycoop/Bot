@@ -1,4 +1,5 @@
 from typing import List
+from utilities.diagnostics import executionTime
 
 class PlayersOnline_Result(object):
 
@@ -6,8 +7,12 @@ class PlayersOnline_Result(object):
         self.FKServerId : str = kwargs['FKServerId']
         self.IP : str = kwargs['IP']
         self.TotalPlayersOnline : int = kwargs.get('TotalPlayersOnline')
-
+        self.Status : int = kwargs.get('Status')
+        self.Version : int = kwargs.get('Version')
+        self.IsResetting : int = kwargs.get('IsResetting')
+        
     @classmethod
+    @executionTime()
     def execute(cls, session) -> List['PlayersOnline_Result']:
         query = 'call PlayersOnline'
 
@@ -21,6 +26,9 @@ class PlayersOnline_Result(object):
     def bind(x) :
         return PlayersOnline_Result(FKServerId = x[0],
                                     TotalPlayersOnline= x[1],
-				                    IP= x[2])
-
-
+				                    IP= x[2],
+                                    Status = x[3],
+                                    Version = x[4],
+                                    IsResetting = x[5])
+    
+    

@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from data import *
 from utilities import Table
+from utilities.diagnostics import executionTime
 
 class ServerStats(BaseCommandModule):
     """Config Model"""
@@ -21,16 +22,19 @@ class ServerStats(BaseCommandModule):
         try:
             result = PlayersOnline_Result.execute(self._session)
 
-            #for row in result:
-            table = Table("Server","Online","IP")
+            table = Table("Server","Online","IP", "Status", "Version", "Online")
 
             for r in result:
-                table.addRow(r.FKServerId, r.TotalPlayersOnline, r.IP)
+                table.addRow(r.FKServerId, 
+                             r.TotalPlayersOnline, 
+                             str(r.IP or ''),
+                             r.Status,
+                             str(r.Version or ''),
+                             r.IsResetting)
 
             await ctx.send(table.toString())
         except Exception as e:
-            await ctx.send(str(e))
-
+           await ctx.send(str(e))
 
 def setup(bot):
     bot.add_cog(ServerStats(bot))
