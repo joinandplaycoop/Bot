@@ -65,6 +65,9 @@
     <Compile Include="utilities\diagnostics.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="utilities\images.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utilities\table.py">
       <SubType>Code</SubType>
     </Compile>
