@@ -6,6 +6,16 @@ from utilities import Table
 from utilities.diagnostics import verboseError
 import aiohttp    
 import io
+import os
+import platform
+
+
+if os.name == 'nt': # Windows
+    basePath = 'C:\\working\\'
+else:
+    basePath = '/working/'
+
+print(f"{platform.uname()} basePath = '{basePath}'")
 
 class Debug(BaseCommandModule):
     """Cog of Debug commands"""
@@ -26,6 +36,15 @@ class Debug(BaseCommandModule):
             await ctx.send(table.toString())
         except Exception as e:
             await ctx.send(str(e))
+
+    @commands.command()
+    @verboseError
+    async def t2(self, ctx):
+        command = os.popen('ls -al')
+        print(command.read())
+        print(command.close())
+        msg = await ctx.send("getting file")
+
 
     @commands.command()
     @verboseError
