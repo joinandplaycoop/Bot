@@ -4,6 +4,7 @@ from discord.ext import commands
 from data import *
 from utilities import Table
 from utilities.diagnostics import executionTime
+from utilities.diagnostics import verboseError
 
 class ServerStats(BaseCommandModule):
     """Config Model"""
@@ -16,25 +17,23 @@ class ServerStats(BaseCommandModule):
     @commands.command()
     async def ping2(self, ctx):
         await ctx.send("pong from: serverStats")
-
-    @commands.command()
+        
+    @commands.command(pass_context=True)
+    @verboseError
     async def online(self, ctx):
-        try:
-            result = PlayersOnline_Result.execute(self._session)
+        result = PlayersOnline_Result.execute(self._session)
 
-            table = Table("Server","Online","IP", "Status", "Version", "Online")
+        table = Table("Server","Online","IP", "Status", "Version", "Online")
 
-            for r in result:
-                table.addRow(r.FKServerId, 
-                             r.TotalPlayersOnline, 
-                             str(r.IP or ''),
-                             r.Status,
-                             str(r.Version or ''),
-                             r.IsResetting)
+        for r in result:
+            table.addRow(r.FKServerId, 
+                            r.TotalPlayersOnline, 
+                            str(r.IP or ''),
+                            r.Status,
+                            str(r.Version or ''),
+                            r.IsResetting)
 
-            await ctx.send(table.toString())
-        except Exception as e:
-           await ctx.send(str(e))
+        await ctx.send(table.toString())
 
 def setup(bot):
     bot.add_cog(ServerStats(bot))
