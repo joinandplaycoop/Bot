@@ -4,18 +4,19 @@ from baseCommandModule import BaseCommandModule
 from discord.ext import commands
 from utilities import Table
 from utilities.diagnostics import verboseError
+from utilities.diagnostics import benchmark
 import aiohttp    
 import io
 import os
 import platform
 
 
-if os.name == 'nt': # Windows
-    basePath = 'C:\\working\\'
-else:
-    basePath = '/working/'
+#if os.name == 'nt': # Windows
+#    basePath = 'C:\\working\\'
+#else:
+#    basePath = '/working/'
 
-print(f"{platform.uname()} basePath = '{basePath}'")
+#print(f"{platform.uname()} basePath = '{basePath}'")
 
 class Debug(BaseCommandModule):
     """Cog of Debug commands"""
@@ -81,7 +82,7 @@ class Debug(BaseCommandModule):
 
     @commands.command()
     @verboseError
-    @executionTime()
+    @benchmark
     async def t5(self, ctx):
         await ctx.send("t5")
         

@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from data import *
 from utilities import Table
-from utilities.diagnostics import executionTime
+from utilities.diagnostics import benchmark
 from utilities.diagnostics import verboseError
 import aiohttp    
 import io
@@ -13,15 +13,9 @@ class ServerStats(BaseCommandModule):
     def __init__(self, bot):
          self.bot = bot
 
-    def initCommandModule():
-        pass
-
-    @commands.command()
-    async def ping2(self, ctx):
-        await ctx.send("pong from: serverStats")
-        
     @commands.command()
     @verboseError
+    @benchmark
     async def online(self, ctx):
         result = PlayersOnline_Result.execute()
 
@@ -39,6 +33,7 @@ class ServerStats(BaseCommandModule):
 
     @commands.command()
     @verboseError
+    @benchmark
     async def rockets(self, ctx):
         msg = await ctx.send("getting file")
 

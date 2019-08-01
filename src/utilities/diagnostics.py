@@ -29,3 +29,17 @@ def verboseError(func):
     sig = inspect.signature(func)
     decorator.__signature__ = sig # sig.replace(parameters=tuple(sig.parameters.values())[1:]) # from ctx onward
     return decorator
+
+
+def benchmark(func):
+    """Prints execution time"""
+    async def decorator(self, ctx,*args, **kwargs):        
+        start = time.time()
+        await func(self, ctx, *args, **kwargs)
+        end = time.time()
+        print(f"{self.__class__.__name__}.{func.__name__}(): {end - start}")
+
+    decorator.__name__ = func.__name__
+    sig = inspect.signature(func)
+    decorator.__signature__ = sig # sig.replace(parameters=tuple(sig.parameters.values())[1:]) # from ctx onward
+    return decorator
