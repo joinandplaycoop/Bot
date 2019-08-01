@@ -40,10 +40,18 @@ class Debug(BaseCommandModule):
     @commands.command()
     @verboseError
     async def t2(self, ctx):
-        command = os.popen('ls -al')
-        print(command.read())
-        print(command.close())
-        msg = await ctx.send("getting file")
+        try:
+            command = os.popen('ls -al')
+            cmd = command.read()
+            print(cmd)
+            if len(cmd) > 0:
+                await ctx.send(cmd)
+            c = command.close()
+            print(c)
+            #await ctx.send(command.close())
+            await ctx.send("Check screen -x")
+        except Exception as e:
+            await ctx.send(str(e))
 
 
     @commands.command()
@@ -62,6 +70,7 @@ class Debug(BaseCommandModule):
 
     @commands.command()
     @verboseError
+    @executionTime()
     async def t4(self, ctx, prop: int):
         await ctx.send(f"t4  prop: {prop}")
 
@@ -69,6 +78,12 @@ class Debug(BaseCommandModule):
     async def t4_error(*args):
         if isinstance(error, commands.CheckFailure):
             await ctx.send(error)
+
+    @commands.command()
+    @verboseError
+    @executionTime()
+    async def t5(self, ctx):
+        await ctx.send("t5")
         
 def setup(bot):
     bot.add_cog(Debug(bot))
