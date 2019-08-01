@@ -18,10 +18,10 @@ class ServerStats(BaseCommandModule):
     async def ping2(self, ctx):
         await ctx.send("pong from: serverStats")
         
-    @commands.command(pass_context=True)
+    @commands.command()
     @verboseError
     async def online(self, ctx):
-        result = PlayersOnline_Result.execute(self._session)
+        result = PlayersOnline_Result.execute()
 
         table = Table("Server","Online","IP", "Status", "Version", "Online")
 

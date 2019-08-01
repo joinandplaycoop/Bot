@@ -1,5 +1,6 @@
 from typing import List
 from utilities.diagnostics import executionTime
+from data.session import Session
 
 class PlayersOnline_Result(object):
 
@@ -13,8 +14,10 @@ class PlayersOnline_Result(object):
         
     @classmethod
     @executionTime()
-    def execute(cls, session) -> List['PlayersOnline_Result']:
-        query = 'call PlayersOnline'
+    def execute(cls) -> List['PlayersOnline_Result']:               
+        session = Session()
+
+        query = 'call PlayersOnline' 
 
         query_result = session.execute(query).fetchall()
 
