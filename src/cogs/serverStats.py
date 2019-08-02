@@ -19,7 +19,7 @@ class ServerStats(BaseCommandModule):
     async def online(self, ctx):
         result = PlayersOnline_Result.execute()
 
-        table = Table("Server","Online","IP", "Status", "Version", "Online")
+        table = Table("Server","Online","IP", "Status", "Version", "Resetting?")
 
         for r in result:
             table.addRow(r.FKServerId, 
@@ -27,7 +27,7 @@ class ServerStats(BaseCommandModule):
                             str(r.IP or ''),
                             r.Status,
                             str(r.Version or ''),
-                            r.IsResetting)
+                            "True" if r.IsResetting else "False")
 
         await ctx.send(table.toString())
 
