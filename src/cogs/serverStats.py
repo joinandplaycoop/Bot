@@ -5,6 +5,7 @@ from data import *
 from utilities import Table
 from utilities.diagnostics import benchmark
 from utilities.diagnostics import verboseError
+from config import Config
 import aiohttp    
 import io
 
@@ -16,18 +17,28 @@ class ServerStats(BaseCommandModule):
     @commands.command()
     @verboseError
     @benchmark
-    async def online(self, ctx):
+    async def online(self, ctx, param = ""):
         result = PlayersOnline_Result.execute()
 
-        table = Table("Server","Online","IP", "Status", "Version", "Resetting?")
+        #ALL Shows complete table
+        if param == "all": 
+            table = Table("Server","Online","IP", "Status", "Version", "Resetting")
 
-        for r in result:
-            table.addRow(r.FKServerId, 
-                            r.TotalPlayersOnline, 
-                            str(r.IP or ''),
-                            r.Status,
-                            str(r.Version or ''),
-                            "True" if r.IsResetting else "False")
+            for r in result:
+                table.addRow(r.FKServerId, 
+                                r.TotalPlayersOnline, 
+                                str(r.IP or ''),
+                                r.Status,
+                                str(r.Version or ''),
+                                "True" if r.IsResetting else "False")
+
+        #Default View: shows condenced for mobile 
+        else: 
+            table = Table("Server","Online")
+
+            for r in result:
+                table.addRow(r.FKServerId, 
+                                r.TotalPlayersOnline)
 
         await ctx.send(table.toString())
 
@@ -38,7 +49,9 @@ class ServerStats(BaseCommandModule):
         msg = await ctx.send("getting file")
 
         async with aiohttp.ClientSession() as session:
-            url = "http://dlpi02.poli.fun:3000/render/d-solo/qS5B5IVWz/factorio-status?orgId=1&refresh=5m&from=1564635600000&to=1564696097219&panelId=10&width=1000&height=500&tz=America%2FChicago"
+
+            url = Config.cfg.imageUrls.rockets
+
             async with session.get(url) as resp:
                 if resp.status == 200:
                     buffer = io.BytesIO(await resp.read())
