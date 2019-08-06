@@ -25,7 +25,6 @@ client : Bot = commands.Bot(command_prefix = prefix, description = description)
 
 
 client.activity = discord.Game(name='Factorio')
-#BaseCommandModule.initCommands(client)
 
 #Events
 @client.event
@@ -33,9 +32,11 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
-    print('------')
+    
+    client.remove_command('help')
 
-
+    initCogs()
+    
 @client.event
 async def on_message(message: discord.Message):
     if message.author == client.user:
@@ -98,14 +99,24 @@ async def cogs(ctx):
     
     print(dir_list)
     await ctx.send(dir_list)
-    
-if __name__ == "__main__":
-    cogs_dir = Config.cfg.cogs_dir
-    for extension in [f.replace('.py', '') for f in listdir(cogs_dir) if isfile(join(cogs_dir, f)) and f.endswith(".py") and not f.startswith("_")]:
-        try:
-            client.load_extension(cogs_dir + "." + extension)
-        except Exception as e:
-            print(f'Failed to load extension {extension}.')
-            traceback.print_exc()
-    token = Config.cfg.botToken if Config.cfg.debugMode == False else Config.cfg.botTokenDebug
-    client.run(token)
+
+def initCogs():    
+    if __name__ == "__main__":
+        cogs_dir = Config.cfg.cogs_dir
+        client.load_extension("commandErrorHandler")
+        print('------ Cogs Loaded ------')
+        print("Loaded: commandErrorHandler")
+        client.load_extension("help")
+        print("Loaded: help")
+
+        for extension in [f.replace('.py', '') for f in listdir(cogs_dir) if isfile(join(cogs_dir, f)) and f.endswith(".py") and not f.startswith("_")]:
+            try:
+                client.load_extension(cogs_dir + "." + extension)
+                print("Loaded: " + extension)
+            except Exception as e:
+                print(f'Failed to load extension {extension}.')
+                traceback.print_exc()
+        print('------ ------ ------')
+
+token = Config.cfg.botToken if Config.cfg.debugMode == False else Config.cfg.botTokenDebug
+client.run(token)

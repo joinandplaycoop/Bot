@@ -9,7 +9,9 @@ import aiohttp
 import io
 import os
 import platform
-
+import datetime
+from utilities import images
+from utilities import Embed
 
 #if os.name == 'nt': # Windows
 #    basePath = 'C:\\working\\'
@@ -57,14 +59,11 @@ class Debug(BaseCommandModule):
 
     @commands.command()
     @verboseError
-    async def t3(self, ctx):
+    async def t3(self, ctx, daysAgo:int):
+        """ '''test''' """
         msg = await ctx.send("getting file")
 
-        async with aiohttp.ClientSession() as session:
-            url = "http://dlpi02.poli.fun:3000/render/d-solo/qS5B5IVWz/factorio-status?orgId=1&refresh=5m&from=1564635600000&to=1564696097219&panelId=10&width=1000&height=500&tz=America%2FChicago"
-            async with session.get(url) as resp:
-                if resp.status == 200:
-                    buffer = io.BytesIO(await resp.read())
+        buffer = await images.getRockets(daysAgo)
 
         await ctx.send(file = discord.File(buffer,"stat.png")) 
         await msg.delete()
@@ -84,7 +83,10 @@ class Debug(BaseCommandModule):
     @verboseError
     @benchmark
     async def t5(self, ctx):
-        await ctx.send("t5")
+        """Tests a crapy embed"""
+        embed = Embed()
+        embed.setTitleDesc("test title","this is a test description")
+        await embed.setThumbnailUrl(ctx,self.bot)
         
 def setup(bot):
     bot.add_cog(Debug(bot))

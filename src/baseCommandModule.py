@@ -1,7 +1,8 @@
 import discord
 from discord.ext.commands.bot import Bot
 from discord.ext import commands
-
+import sys
+import traceback
 
 class BaseCommandModule(commands.Cog):
     """
@@ -17,7 +18,10 @@ class BaseCommandModule(commands.Cog):
 
     def __init_subclass__(cls, *args, **kwargs):
         super().__init_subclass__(*args, **kwargs)
-        cls._subclasses.append(cls)  
+        cls._subclasses.append(cls) 
+        
+   
+
         
 
 

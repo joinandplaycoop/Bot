@@ -39,6 +39,9 @@
     <Compile Include="cogs\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="commandErrorHandler.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="data\session.py">
       <SubType>Code</SubType>
     </Compile>
@@ -46,6 +49,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="data\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="help.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\configModel.py">
@@ -65,10 +71,16 @@
     <Compile Include="utilities\diagnostics.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="utilities\embed.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utilities\images.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="utilities\table.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\textFileFollow.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="utilities\__init__.py">
