@@ -38,7 +38,14 @@ class Help(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        
+
+    @commands.command()
+    async def t8(self, ctx):
+        """Tests a crapy embed"""
+        embed = Embed()
+        embed.setTitleDesc("test title","this is a test description")
+        await embed.setThumbnailUrl(ctx,self.bot)
+
     @commands.command(
        name = "help",
        description='The help command!',
@@ -73,6 +80,10 @@ class Help(commands.Cog):
                # Get a list of all commands under each cog
 
                cog_commands = self.bot.get_cog(cog).get_commands()
+
+               if len(cog_commands) == 0:
+                   continue
+
                commands_list = ''
                for comm in cog_commands:
                    commands_list += f'**{comm.name}** - *{comm.description}*\n'
