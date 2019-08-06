@@ -2,7 +2,8 @@ import traceback
 import sys
 from discord.ext import commands
 import discord
-
+from config import Config
+import traceback
 
 class CommandErrorHandler(commands.Cog):
     def __init__(self, bot):
@@ -33,16 +34,25 @@ class CommandErrorHandler(commands.Cog):
                 pass
 
         elif isinstance(error, commands.BadArgument):
-            if ctx.command.qualified_name == 'tag list':
-                return await ctx.send('I could not find that member. Please try again.')
+                return await ctx.send(error.args[0])
 
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(str(error) +" :" + str(error.param))
-            return
+        elif isinstance(error, commands.MissingRequiredArgument):           
+            return  await ctx.send( f"{error} \n*[{error.param}]*")
             
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
-        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)    
-                
+        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+
+        #TODO enable once in production
+        #if Config.cfg.debugMode:
+        test = self.exception_to_string(error)
+        await ctx.send(test)
+
+    def exception_to_string(self, excp):
+        stack =  traceback.extract_tb(excp.__traceback__)  # add limit=?? 
+        pretty = traceback.format_list(stack)
+        group = ''.join(pretty) + '\n {} {}'.format(excp.__class__,excp)
+        return  f"```prolog\n{group}```"
+                           
 
 def setup(bot):
     bot.add_cog(CommandErrorHandler(bot))
