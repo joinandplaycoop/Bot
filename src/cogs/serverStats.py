@@ -1,5 +1,6 @@
 from baseCommandModule import BaseCommandModule
 import discord
+import utilities.images as img
 from discord.ext import commands
 from data import *
 from utilities import Table
@@ -17,7 +18,7 @@ class ServerStats(BaseCommandModule):
     @commands.command()
     @verboseError
     @benchmark
-    async def online(self, ctx, param = ""):
+    async def online(self, ctx, param=""):
         result = PlayersOnline_Result.execute()
 
         #ALL Shows complete table
@@ -32,7 +33,7 @@ class ServerStats(BaseCommandModule):
                                 str(r.Version or ''),
                                 "True" if r.IsResetting else "False")
 
-        #Default View: shows condenced for mobile 
+        #Default View: shows condenced for mobile
         else: 
             table = Table("Server","Online")
 
@@ -45,18 +46,12 @@ class ServerStats(BaseCommandModule):
     @commands.command()
     @verboseError
     @benchmark
-    async def rockets(self, ctx):
+    async def rockets(self, ctx, daysAgo:int=0):
         msg = await ctx.send("getting file")
-
-        async with aiohttp.ClientSession() as session:
-
-            url = Config.cfg.imageUrls.rockets
-
-            async with session.get(url) as resp:
-                if resp.status == 200:
-                    buffer = io.BytesIO(await resp.read())
-
-        await ctx.send(file = discord.File(buffer,"stat.png")) 
+        
+        buffer = await img.getRockets(daysAgo)
+        content = f"`Rockets from {daysAgo} days ago until now`" if daysAgo != 0 else "`Lastest Rockets`"
+        await ctx.send(file = discord.File(buffer,"stat.png"), content=content) 
         await msg.delete()
 
 def setup(bot):

@@ -1,13 +1,15 @@
 import aiohttp
 from config import Config
 import math
+import io
 
-
-async def getRockets(daysAgo:int):        
+async def getRockets(daysAgo:int = 0):        
     async with aiohttp.ClientSession() as session:
 
         url = Config.cfg.imageUrls.rockets
-        url = url.format(-abs(daysAgo))
+
+        days = str(-abs(daysAgo)) + "d" if daysAgo != 0 else ""
+        url = url.format(days)
 
         async with session.get(url) as resp:
             if resp.status == 200:
