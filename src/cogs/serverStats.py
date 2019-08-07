@@ -21,6 +21,8 @@ class ServerStats(BaseCommandModule):
     async def online(self, ctx, param=""):
         result = PlayersOnline_Result.execute()
 
+        total = sum(r.TotalPlayersOnline for r in result)
+
         #ALL Shows complete table
         if param == "all": 
             table = Table("Server","Online","IP", "Status", "Version", "Resetting")
@@ -41,7 +43,7 @@ class ServerStats(BaseCommandModule):
                 table.addRow(r.FKServerId, 
                                 r.TotalPlayersOnline)
 
-        await ctx.send(table.toString())
+        await ctx.send(f" `Total Players Online: {total}` " + table.toString())
 
     @commands.command()
     @verboseError

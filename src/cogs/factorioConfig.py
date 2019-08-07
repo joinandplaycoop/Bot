@@ -7,6 +7,7 @@ from utilities.diagnostics import benchmark
 from utilities import handlers
 from utilities.rcon import RconConnection
 from baseCommandModule import BaseCommandModule
+import time
 
 class FactorioConfig(BaseCommandModule):
     """description of class"""
@@ -16,15 +17,14 @@ class FactorioConfig(BaseCommandModule):
          self._tasks = None
     
     @commands.command()
-    @verboseError
-    @benchmark
     async def players(self, ctx, param=""):
         await self.start_background_tasks(ctx)
-
+        
 
     async def start_background_tasks(self,ctx):
         coroutines = [
             poll_rcon('/players', handlers.handle_players, ctx),
+            #Calls to other servers here
             #poll_rcon('/admins', handlers.handle_admins),
             #poll_local_mods(handlers.handle_mods),
             #poll_config(handlers.handle_config),
@@ -38,6 +38,8 @@ class FactorioConfig(BaseCommandModule):
 
 async def poll_rcon(command, handler, ctx, interval=1):
     """More specific version of monitor_coroutine() for rcon commands"""
+    
+    start = time.time()
     async with RconConnection() as rcon:
         previous_value = None
         while True:
@@ -45,6 +47,8 @@ async def poll_rcon(command, handler, ctx, interval=1):
                 value = await rcon.run_command(command)
                 if value != previous_value:
                     await handler(ctx, value)
+                    end = time.time()
+                    print(f"poll_rcon() ['{command}']: {end - start}")
                 previous_value = value
                 await asyncio.sleep(interval)
             except asyncio.CancelledError:
