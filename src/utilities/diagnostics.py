@@ -1,6 +1,8 @@
 import time
 import functools
 import inspect
+import asyncio
+import traceback
 
 def executionTime():
     def decorator(func):
@@ -43,3 +45,12 @@ def benchmark(func):
     sig = inspect.signature(func)
     decorator.__signature__ = sig # sig.replace(parameters=tuple(sig.parameters.values())[1:]) # from ctx onward
     return decorator
+
+
+async def handle_aio_exceptions(coroutine):
+    try:
+        await coroutine
+    except asyncio.CancelledError:
+        pass
+    except Exception:
+        traceback.print_exc()
