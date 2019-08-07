@@ -20,10 +20,9 @@ class FactorioConfig(BaseCommandModule):
     async def players(self, ctx, param=""):
         await self.start_background_tasks(ctx)
         
-
+ 
     async def start_background_tasks(self,ctx):
-        coroutines = [
-            poll_rcon('/players', handlers.handle_players, ctx),
+        coroutines = [poll_rcon('/players', handlers.handle_players, ctx),
             #Calls to other servers here
             #poll_rcon('/admins', handlers.handle_admins),
             #poll_local_mods(handlers.handle_mods),
@@ -32,9 +31,8 @@ class FactorioConfig(BaseCommandModule):
             #poll_mod_database(handlers.handle_mod_database),
         ]
 
-        self._tasks = asyncio.gather(
-            *map(handle_aio_exceptions, coroutines)
-        )
+        self._tasks = asyncio.gather(*map(handle_aio_exceptions, coroutines))
+
 
 async def poll_rcon(command, handler, ctx, interval=1):
     """More specific version of monitor_coroutine() for rcon commands"""
@@ -42,17 +40,17 @@ async def poll_rcon(command, handler, ctx, interval=1):
     start = time.time()
     async with RconConnection() as rcon:
         previous_value = None
-        while True:
-            try:
-                value = await rcon.run_command(command)
-                if value != previous_value:
-                    await handler(ctx, value)
-                    end = time.time()
-                    print(f"poll_rcon() ['{command}']: {end - start}")
-                previous_value = value
-                await asyncio.sleep(interval)
-            except asyncio.CancelledError:
-                return
+        #while True:
+        try:
+            value = await rcon.run_command(command)
+            if value != previous_value:
+                await handler(ctx, value)
+                end = time.time()
+                print(f"poll_rcon() ['{command}']: {end - start}")
+            previous_value = value
+            await asyncio.sleep(interval)
+        except asyncio.CancelledError:
+            return
 
 
 async def poll_config(handler, interval=10):

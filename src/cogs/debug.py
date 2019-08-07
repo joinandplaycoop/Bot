@@ -1,4 +1,5 @@
 import discord
+import asyncio
 from data import *
 from baseCommandModule import BaseCommandModule
 from discord.ext import commands
@@ -12,6 +13,7 @@ import platform
 import datetime
 from utilities import images
 from utilities import Embed
+from cogs.factorioConfig import poll_rcon
 
 #if os.name == 'nt': # Windows
 #    basePath = 'C:\\working\\'
@@ -68,16 +70,12 @@ class Debug(BaseCommandModule):
         await ctx.send(file = discord.File(buffer,"stat.png")) 
         await msg.delete()
 
+       
     @commands.command()
-    @verboseError
-    @executionTime()
-    async def t4(self, ctx, prop: int):
-        await ctx.send(f"t4  prop: {prop}")
+    async def rc(self, ctx, *args):
+        rcCommand = ' '.join(map(str, args))
+        self._dynTask = asyncio.create_task(poll_rcon(rcCommand, handle_dynamic, ctx))
 
-    @t4.error
-    async def t4_error(*args):
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send(error)
 
     @commands.command()
     @verboseError
@@ -88,5 +86,8 @@ class Debug(BaseCommandModule):
         embed.setTitleDesc("test title","this is a test description")
         await embed.setThumbnailUrl(ctx,self.bot)
         
+async def  handle_dynamic(ctx, data:str):
+    await ctx.send(data)
+
 def setup(bot):
     bot.add_cog(Debug(bot))

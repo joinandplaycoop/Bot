@@ -12,6 +12,8 @@ from utilities import Table
 
 logger = logging.getLogger(__name__)
 
+async def  handle_dynamic(ctx, data:str):
+    await ctx.send(data)
 
 async def handle_players(ctx, player_data: str):
     player_data = player_data.decode('utf8')
