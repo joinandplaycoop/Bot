@@ -1,13 +1,13 @@
 import discord
 import asyncio
 from discord.ext import commands
-from utilities.diagnostics import handle_aio_exceptions
-from utilities.diagnostics import verboseError
-from utilities.diagnostics import benchmark
+from utilities.diagnostics import handle_aio_exceptions, verboseError, benchmark
+from models import Server
 from utilities import handlers
 from utilities.rcon import RconConnection
 from baseCommandModule import BaseCommandModule
 import time
+from config import Config
 
 class FactorioConfig(BaseCommandModule):
     """description of class"""
@@ -18,35 +18,43 @@ class FactorioConfig(BaseCommandModule):
     
     @commands.command()
     async def players(self, ctx, param=""):
-        await self.start_background_tasks(ctx)
+        await start_background_tasks(ctx,)
         
  
-    async def start_background_tasks(self,ctx):
-        coroutines = [poll_rcon('/players', handlers.handle_players, ctx),
-            #Calls to other servers here
-            #poll_rcon('/admins', handlers.handle_admins),
-            #poll_local_mods(handlers.handle_mods),
-            #poll_config(handlers.handle_config),
-            #determine_ip(handlers.handle_ip),
-            #poll_mod_database(handlers.handle_mod_database),
-        ]
+async def start_background_tasks(ctx, command: str, handler):
 
-        self._tasks = asyncio.gather(*map(handle_aio_exceptions, coroutines))
+    coroutines = []
+    for s in Config.cfg.servers:
+        coroutines.append(poll_rcon(s, command, handler, ctx))
 
+    #coroutines = [poll_rcon(s.serverName,command, handler, ctx),
+        #Calls to other servers here
+        #poll_rcon('/admins', handlers.handle_admins),
+        #poll_local_mods(handlers.handle_mods),
+        #poll_config(handlers.handle_config),
+        #determine_ip(handlers.handle_ip),
+        #poll_mod_database(handlers.handle_mod_database),
+    #]
 
-async def poll_rcon(command, handler, ctx, interval=1):
+    _tasks = asyncio.gather(*map(handle_aio_exceptions, coroutines))
+
+async def start_background_task(server: Server, ctx, command: str, handler):
+    coroutines = [poll_rcon(server, command, handler, ctx)]
+    _tasks = asyncio.gather(*map(handle_aio_exceptions, coroutines))
+
+async def poll_rcon(server, command: str, handler, ctx, interval=1):
     """More specific version of monitor_coroutine() for rcon commands"""
     
     start = time.time()
-    async with RconConnection() as rcon:
+    async with RconConnection(server, ctx) as rcon:
         previous_value = None
         #while True:
         try:
             value = await rcon.run_command(command)
             if value != previous_value:
-                await handler(ctx, value)
+                await handler(ctx, server, value)
                 end = time.time()
-                print(f"poll_rcon() ['{command}']: {end - start}")
+                print(f"poll_rcon() [{server.serverName}] [{command}]: {end - start}")
             previous_value = value
             await asyncio.sleep(interval)
         except asyncio.CancelledError:

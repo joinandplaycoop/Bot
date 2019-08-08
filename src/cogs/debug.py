@@ -3,17 +3,15 @@ import asyncio
 from data import *
 from baseCommandModule import BaseCommandModule
 from discord.ext import commands
-from utilities import Table
-from utilities.diagnostics import verboseError
-from utilities.diagnostics import benchmark
+from utilities.diagnostics import verboseError, benchmark
 import aiohttp    
 import io
 import os
 import platform
 import datetime
-from utilities import images
-from utilities import Embed
-from cogs.factorioConfig import poll_rcon
+from utilities import images, Embed,Table
+from config import Config
+from cogs.factorioConfig import start_background_task,start_background_tasks
 
 #if os.name == 'nt': # Windows
 #    basePath = 'C:\\working\\'
@@ -21,7 +19,6 @@ from cogs.factorioConfig import poll_rcon
 #    basePath = '/working/'
 
 #print(f"{platform.uname()} basePath = '{basePath}'")
-
 class Debug(BaseCommandModule):
     """Cog of Debug commands"""
     def __init__(self, bot):
@@ -74,8 +71,21 @@ class Debug(BaseCommandModule):
     @commands.command()
     async def rc(self, ctx, *args):
         rcCommand = ' '.join(map(str, args))
-        self._dynTask = asyncio.create_task(poll_rcon(rcCommand, handle_dynamic, ctx))
+        await start_background_tasks(ctx, rcCommand, handle_dynamic)
+        #self._dynTask = asyncio.create_task(poll_rcon(rcCommand,
+        #handle_dynamic, ctx))
 
+    @commands.command()
+    async def rcs(self, ctx, serverName, *args):
+        s = next((x for x in Config.cfg.servers if x.serverName == serverName), None)
+        if s == None:
+            return await ctx.send(f"No server named `{serverName}`")
+
+        rcCommand = ' '.join(map(str, args))
+        
+        await start_background_task(s, ctx,rcCommand, handle_dynamic,)
+        #self._dynTask = asyncio.create_task(poll_rcon(rcCommand,
+        #handle_dynamic, ctx))
 
     @commands.command()
     @verboseError
@@ -86,7 +96,7 @@ class Debug(BaseCommandModule):
         embed.setTitleDesc("test title","this is a test description")
         await embed.setThumbnailUrl(ctx,self.bot)
         
-async def  handle_dynamic(ctx, data:str):
+async def  handle_dynamic(ctx, server, data:str):
     await ctx.send(data)
 
 def setup(bot):

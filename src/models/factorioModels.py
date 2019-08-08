@@ -2,14 +2,14 @@ from pathlib import Path
 from typing import Tuple, Any
 
 
-class State(object):
+class Model(object):
 
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
 
-class Player(State):
+class Player(Model):
     username: str
     is_online: bool = False
 
@@ -20,7 +20,7 @@ class Player(State):
         )
 
 
-class Mod(State):
+class Mod(Model):
     file: Path
     enabled: bool
     name: str
@@ -35,7 +35,7 @@ class Mod(State):
         )
 
 
-class ServerConfig(State):
+class ServerConfig(Model):
     afk_auto_kick: bool
     allow_commands: str
     autosave_interval: str
@@ -56,7 +56,7 @@ class ServerConfig(State):
         return self.__dict__
 
 
-class Server(State):
+class Server(Model):
     description: str
     players: Tuple[Player] = tuple()
     admins: Tuple[Player] = tuple()

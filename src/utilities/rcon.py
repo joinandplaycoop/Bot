@@ -2,7 +2,7 @@ import asyncio
 import socket
 import struct
 import sys
-from config import Config
+from config import Config, Server
 import logging
 
 
@@ -26,17 +26,14 @@ async def send_message(writer, command_string, message_type):
 
     try:
         # size of message in bytes:
-        # id=4 + type=4 + body=variable + null terminator=2 (1 for python string and 1 for message terminator)
+        # id=4 + type=4 + body=variable + null terminator=2 (1 for python
+        # string and 1 for message terminator)
         message_size = (4 + 4 + len(command_string) + 2)
         message_format = ''.join(['=lll', str(len(command_string)), 's2s'])
-        packed_message = struct.pack(
-            message_format, message_size, MESSAGE_ID, message_type, command_string.encode('utf8'), b'\x00\x00'
-        )
+        packed_message = struct.pack(message_format, message_size, MESSAGE_ID, message_type, command_string.encode('utf8'), b'\x00\x00')
         writer.write(packed_message)
-        response_data = await asyncio.wait_for(
-            writer.drain(),
-            timeout=Config.cfg.rcon.timeout
-        )
+        response_data = await asyncio.wait_for(writer.drain(),
+            timeout=Config.cfg.rconTimeout)
 
     except asyncio.TimeoutError:
         raise RconTimeoutError('Timeout sending RCON message. type={}, command={}'.format(message_type, command_string))
@@ -50,12 +47,9 @@ async def get_response(reader):
         response_size, = struct.unpack('=l', await reader.read(4))
         message_format = ''.join(['=ll', str(response_size - 9), 's1s'])
 
-        response_data = await asyncio.wait_for(
-            reader.read(response_size),
-            timeout=Config.cfg.rcon.timeout
-        )
-        response_id, response_type, response_string, response_dummy \
-            = struct.unpack(message_format, response_data)
+        response_data = await asyncio.wait_for(reader.read(response_size),
+            timeout=Config.cfg.rconTimeout)
+        response_id, response_type, response_string, response_dummy = struct.unpack(message_format, response_data)
         response_string = response_string.rstrip(b'\x00\n')
         return response_string, response_id, response_type
 
@@ -65,38 +59,36 @@ async def get_response(reader):
 
 class RconConnection():
 
+    def __init__(self, server: Server, ctx):
+         self.server = server
+         self.ctx = ctx
+
     async def __aenter__(self):
-        logger.debug('Authenticating with RCON server {}:{} using password "{}"'.format(
-            Config.cfg.rcon.host,
-            Config.cfg.rcon.port,
-            Config.cfg.rcon.password,
-        ))
+        logger.debug('Authenticating with RCON server {}:{} using password "{}"'.format(self.server.rcon.host,
+            self.server.rcon.port,
+            self.server.rcon.password,))
 
         try:
-            self.reader, self.writer = await asyncio.wait_for(
-                asyncio.open_connection(Config.cfg.rcon.host, Config.cfg.rcon.port),
-                timeout=Config.cfg.rcon.timeout
-            )
+            self.reader, self.writer = await asyncio.wait_for(asyncio.open_connection(self.server.rcon.host, self.server.rcon.port),
+                timeout=Config.cfg.rconTimeout)
         except asyncio.TimeoutError:
-            raise RconTimeoutError('Timeout connecting to RCON server {}:{}'.format(
-                Config.cfg.rcon.host,
-                Config.cfg.rcon.port
-            ))
+            e = 'Timeout connecting to RCON server {}:{}'.format(self.server.rcon.host, self.server.rcon.port)
+            await self.ctx.send("Timeout connecting to RCON")
+            raise RconTimeoutError(e)
         except ConnectionRefusedError:
-            raise RconConnectionError('Server {} refused attempted RCON connection on port {}'.format(
-                Config.cfg.rcon.host,
-                Config.cfg.rcon.port
-            ))
+            e = 'Server {} refused attempted RCON connection on port {}'.format(self.server.rcon.host, self.server.rcon.port)
+            await self.ctx.send("Connection Refused Error")
+            raise RconConnectionError(e)
 
-        await send_message(self.writer, Config.cfg.rcon.password, MESSAGE_TYPE_AUTH)
+        await send_message(self.writer, self.server.rcon.password, MESSAGE_TYPE_AUTH)
         response_string, response_id, response_type = await get_response(self.reader)
 
         if response_id == -1:
-            raise RconAuthenticatedFailed('Failed to authenticate with RCON server {}:{} using password "{}"'.format(
-                Config.cfg.rcon.host,
-                Config.cfg.rcon.port,
-                Config.cfg.rcon.password,
-            ))
+            e = 'Failed to authenticate with RCON server {}:{} using password "{}"'.format(self.server.rcon.host,
+                self.server.rcon.port,
+                self.server.rcon.password)
+            await self.ctx.send("Failed to authenticate with RCON server")
+            raise RconAuthenticatedFailed()
         else:
             logger.debug('Successfully authenticated with RCON server')
 
@@ -111,7 +103,8 @@ class RconConnection():
         await send_message(self.writer, command, MESSAGE_TYPE_COMMAND)
         response_string, response_id, response_type = await get_response(self.reader)
 
-        # See: https://developer.valvesoftware.com/wiki/Source_RCON_Protocol#Multiple-packet_Responses
+        # See:
+        # https://developer.valvesoftware.com/wiki/Source_RCON_Protocol#Multiple-packet_Responses
         # Basically we get an empty packet after each response
         if command.startswith('/config'):
             # ServerConfig commands seem to be multi-packet responses
