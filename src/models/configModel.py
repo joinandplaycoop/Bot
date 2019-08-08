@@ -6,6 +6,7 @@ class MySql:
 @dataclass
 class ImageUrls:
      rockets : str
+     playTime : str
 
 @dataclass
 class Rcon:

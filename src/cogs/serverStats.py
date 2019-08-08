@@ -49,6 +49,9 @@ class ServerStats(BaseCommandModule):
     @verboseError
     @benchmark
     async def rockets(self, ctx, daysAgo:int=0):
+        """Displays graph of total rockets from X days ago
+            rockets [daysAgo]
+        """
         msg = await ctx.send("getting file")
         
         buffer = await img.getRockets(daysAgo)
