@@ -26,7 +26,7 @@ class PlayerStats(BaseCommandModule):
         """Playtime graph from player X from Y days ago
             played [player][daysAgo]
         """
-        msg = await ctx.send("getting file")        
+        msg = await ctx.send("Getting the file :arrows_counterclockwise:")        
         buffer = await img.getPlaytime(userName,daysAgo)
         content = f"`Playtime of {userName} from {daysAgo} days ago until now`"
         await ctx.send(file = discord.File(buffer,"stat.png"), content=content) 

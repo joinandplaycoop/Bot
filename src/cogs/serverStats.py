@@ -52,7 +52,7 @@ class ServerStats(BaseCommandModule):
         """Displays graph of total rockets from X days ago
             rockets [daysAgo]
         """
-        msg = await ctx.send("getting file")
+        msg = await ctx.send("Getting the file :arrows_counterclockwise:")
         
         buffer = await img.getRockets(daysAgo)
         content = f"`Rockets from {daysAgo} days ago until now`" if daysAgo != 0 else "`Lastest Rockets`"
