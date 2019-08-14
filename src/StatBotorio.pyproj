@@ -33,7 +33,7 @@
     <Compile Include="cogs\debug.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="cogs\factorioConfig.py">
+    <Compile Include="cogs\rconCommands.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="cogs\playerStats.py">

@@ -73,11 +73,11 @@ class RconConnection():
                 timeout=Config.cfg.rconTimeout)
         except asyncio.TimeoutError:
             e = 'Timeout connecting to RCON server {}:{}'.format(self.server.rcon.host, self.server.rcon.port)
-            await self.ctx.send("Timeout connecting to RCON")
+            await self.ctx.send(f"[{self.server.serverName}] - Timeout connecting to RCON")
             raise RconTimeoutError(e)
         except ConnectionRefusedError:
             e = 'Server {} refused attempted RCON connection on port {}'.format(self.server.rcon.host, self.server.rcon.port)
-            await self.ctx.send("Connection Refused Error")
+            await self.ctx.send(f"[{self.server.serverName}] - Connection Refused Error")
             raise RconConnectionError(e)
 
         await send_message(self.writer, self.server.rcon.password, MESSAGE_TYPE_AUTH)
@@ -87,7 +87,7 @@ class RconConnection():
             e = 'Failed to authenticate with RCON server {}:{} using password "{}"'.format(self.server.rcon.host,
                 self.server.rcon.port,
                 self.server.rcon.password)
-            await self.ctx.send("Failed to authenticate with RCON server")
+            await self.ctx.send(f"[{self.server.serverName}] - Failed to authenticate with RCON server")
             raise RconAuthenticatedFailed()
         else:
             logger.debug('Successfully authenticated with RCON server')

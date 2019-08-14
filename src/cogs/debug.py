@@ -11,33 +11,46 @@ import platform
 import datetime
 from utilities import images, Embed,Table
 from config import Config
-from cogs.factorioConfig import start_background_task,start_background_tasks
+from cogs.rconCommands import start_background_task,start_background_tasks
+from pprint import pprint
+import random
 
+import nest_asyncio
+nest_asyncio.apply()
 #if os.name == 'nt': # Windows
 #    basePath = 'C:\\working\\'
 #else:
 #    basePath = '/working/'
 
 #print(f"{platform.uname()} basePath = '{basePath}'")
+
+async def coro(tag):
+    print(">", tag)
+    await asyncio.sleep(random.uniform(1, 3))
+    print("<", tag)
+    return tag          
+
 class Debug(BaseCommandModule):
     """Cog of Debug commands"""
     def __init__(self, bot):
         self.bot = bot
+        self.hidden = True
+
 
     @commands.command()
     async def t1(self, ctx):
-        try:
-            result = PlayersOnline_Result.execute(self._session)
+        
+        loop = asyncio.get_event_loop()
 
-            #for row in result:
-            table = Table("Server","Online")
+        group1 = asyncio.gather(*[coro("group 1.{}".format(i)) for i in range(1, 6)])
+        group2 = asyncio.gather(*[coro("group 2.{}".format(i)) for i in range(1, 4)])
+        group3 = asyncio.gather(*[coro("group 3.{}".format(i)) for i in range(1, 10)])
 
-            for r in result:
-                table.addRow(r.FKServerId, r.TotalPlayersOnline)
+        all_groups = asyncio.gather(group1, group2, group3)
 
-            await ctx.send(table.toString())
-        except Exception as e:
-            await ctx.send(str(e))
+        results = loop.run_until_complete(all_groups)
+        
+        pprint(results)
 
     @commands.command()
     @verboseError

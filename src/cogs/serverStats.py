@@ -11,7 +11,7 @@ import aiohttp
 import io
 
 class ServerStats(BaseCommandModule):
-    """Config Model"""
+    """These commands are specific for returning stats about the server"""
     def __init__(self, bot):
          self.bot = bot
 

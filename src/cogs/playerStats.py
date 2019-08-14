@@ -6,22 +6,11 @@ from sqlalchemy import func
 import utilities.images as img
 
 class PlayerStats(BaseCommandModule):
-    """Cog of PlayerStats"""
+    """Displays stats specific to individual players"""
     def __init__(self, bot):
         self.bot = bot
-        
-    #@commands.command()
-    #async def ping1(self, ctx):
-    #    test = self._session.execute(func.upper('PlayersOnline')).scalar()
-
-    #    query = 'call PlayersOnline'
-    #    #result = self._session.execute(query).fetchall()
-
-    #    result2 = PlayersOnline_Result.execute(self._session)
-
-    #    await ctx.send("pong from: playerStats")
-
-    @commands.command()
+           
+    @commands.command(brief ='Playtime graph from player X from Y days ago')
     async def played(self, ctx, userName:str, daysAgo:int=7):
         """Playtime graph from player X from Y days ago
             played [player][daysAgo]
