@@ -12,7 +12,7 @@
   </a>
 </p>
 <h2 align="center">Join and Play Coop repository</h2>
-# Project Code Name: StatBotorio #
+<h3>Project Code Name: StatBotorio</h3>
 
 `Requires Python 3`
 
